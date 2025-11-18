@@ -36,17 +36,17 @@ class login:
         try:
             self.driver.find_element(By.XPATH, "//span[normalize-space()='Hello, John']").click()
             self.driver.find_element(By.XPATH, "//a[normalize-space()='Log out']").click()
-            print("🔓 Logout ejecutado")
+            print("Cerrado! Logout ejecutado")
         except NoSuchElementException:
-            print("⚠️ No se encontró el botón de logout")
+            print("Alert No se encontró el botón de logout")
 
     def validar_logout(self):
         try:
             self.driver.find_element(By.XPATH, "//button[@class='NavButton__nav-button___34wHC']")
-            print("✅ Logout exitoso: volvió al login")
+            print("OK Logout exitoso: volvió al login")
             return True
         except NoSuchElementException:
-            print("❌ Logout fallido")
+            print(" Logout fallido")
             return False
 
     @staticmethod

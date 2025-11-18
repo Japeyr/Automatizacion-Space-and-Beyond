@@ -3,6 +3,9 @@ from openpyxl.reader.excel import load_workbook
 from openpyxl.styles import Alignment, Font, PatternFill, Border, Side
 from openpyxl.utils import get_column_letter
 import time
+from threading import Lock
+
+lock = Lock()
 
 
 def head_planilla():
@@ -74,6 +77,7 @@ def datos1(fila, user, password, resultado):
     print("📅 Fecha y hora actual:", fecha_hora_actual)
 
     wb = load_workbook("Casos_Prueba_Space&Beyond.xlsx")
+
     hoja = wb.active
 
     hoja.append([
@@ -177,6 +181,7 @@ def datos2(fila_logout, resultado):
     print("📅 Fecha y hora actual:", fecha_hora_actual)
 
     wb = load_workbook("Casos_Prueba_Space&Beyond.xlsx")
+
     hoja = wb.active
 
     hoja.append([
@@ -258,6 +263,7 @@ def datos2(fila_logout, resultado):
 # Contenido a agregar al final de Planilla_Calculo.py
 def datos3(fila_id, planeta_num, nombre, email, ss, tel, codigo, resultado_validacion, resultado_web):
     wb = load_workbook("Casos_Prueba_Space&Beyond.xlsx")
+
     hoja = wb.active
     secuencia_id = hoja.max_row
 
@@ -367,3 +373,4 @@ def datos3(fila_id, planeta_num, nombre, email, ss, tel, codigo, resultado_valid
             celda.border = borde_fino
 
     wb.save("Casos_Prueba_Space&Beyond.xlsx")
+

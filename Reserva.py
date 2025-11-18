@@ -32,7 +32,7 @@ class planeta:
         self.driver.execute_script("arguments[0].scrollIntoView(true);", apply_button)
         apply_button.click()
 
-        # Esperar a que aparezca el tilde o confirmación
+        # Esperar a que aparezca él tilde o confirmación
         tilde = wait.until(EC.element_to_be_clickable((By.XPATH, xpath_tilde)))
         tilde.click()
 
@@ -48,7 +48,8 @@ class planeta:
             except Exception as e:
                 print(f"No se pudo limpiar el campo {xpath}: {e}")
 
-    def validar_datos(self, nombre, email, seguro_social, telefono, codigo_descuento):
+    @staticmethod
+    def validar_datos(nombre, email, seguro_social, telefono, codigo_descuento):
         errores = []
 
         # --- Validar nombre ---
@@ -60,7 +61,7 @@ class planeta:
         # --- Validar email ---
         if not email:
             errores.append("El email no puede estar vacío.")
-        elif not re.match(r"^[\w\.-]+@[\w\.-]+\.\w+$", email):
+        elif not re.match(r"^[\w.-]+@[\w.-]+\.\w+$", email):
             errores.append("El formato del email es inválido.")
 
         # --- Validar número de seguro social ---
@@ -74,12 +75,12 @@ class planeta:
             errores.append("El teléfono no puede estar vacío.")
         else:
             # ------------------------
-            # 📱 España: +34 Nxx xxx xxx (N = 6,7,8,9)
+            #  España: +34 Nxx xxx xxx (N = 6,7,8,9)
             # Ejemplo válido: +34 612 345 678
             patron_espania = r"^\+34\s[6789]\d{2}\s\d{3}\s\d{3}$"
 
             # ------------------------
-            # 🇬🇧 Reino Unido:
+            #  Reino Unido:
             # - Móviles: +44 7xxx xxx xxx
             # - Fijos: +44 1xx xxx xxxx, +44 2x xxxx xxxx, +44 3xx xxx xxxx, etc.
             # Aceptamos espacios o no, pero mantenemos formato legible.
@@ -89,9 +90,9 @@ class planeta:
             )
 
             if re.match(patron_espania, telefono):
-                print("✅ Teléfono válido (España).")
+                print("OK Teléfono válido (España).")
             elif re.match(patron_reino_unido, telefono):
-                print("✅ Teléfono válido (Reino Unido).")
+                print("OK Teléfono válido (Reino Unido).")
             else:
                 errores.append(
                     "El teléfono debe tener formato español (+34 Nxx xxx xxx, N=6–9) "
@@ -109,15 +110,15 @@ class planeta:
             elif len(codigo_descuento) < 5:
                 errores.append("El código de descuento debe tener al menos 5 caracteres.")
             else:
-                print("✅ Código válido: el botón 'Apply' debería estar habilitado.")
+                print("OK Código válido: el botón 'Apply' debería estar habilitado.")
 
         # Resultado final
         if errores:
-            print("🚫 Errores de validación detectados:")
+            print(" Errores de validación detectados:")
             for e in errores:
                 print("   -", e)
         else:
-            print("✅ Todos los datos pasaron las validaciones lógicas.")
+            print("OK Todos los datos pasaron las validaciones lógicas.")
 
         return errores
 
@@ -135,10 +136,9 @@ class planeta:
                 print("🟡 Botón 'Pay now' habilitado correctamente.")
                 return True
             else:
-                print(f"⚪ Botón 'Pay now' no habilitado (color actual: {color}).")
+                print(f" Botón 'Pay now' no habilitado (color actual: {color}).")
                 return False
 
         except Exception as e:
-            print(f"⚠️ No se pudo verificar el botón 'Pay now': {e}")
+            print(f"Alerta! No se pudo verificar el botón 'Pay now': {e}")
             return False
-
