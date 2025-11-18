@@ -1,14 +1,15 @@
 # 🪐 Automatización de Pruebas Funcionales – Space&Beyond
 
-Este proyecto implementa una **automatización de pruebas funcionales** sobre el sitio [demo.testim.io](https://demo.testim.io/), utilizando **Python y Selenium WebDriver**.  
+Este proyecto implementa una **automatización de pruebas funcionales** sobre el sitio [demo.testim.io](https://demo.testim.io/), utilizando **Python, Selenium WebDriver**, y el framework de testing **Pytest**.  
 El sistema verifica los flujos de **login/logout** y **reserva de planetas**, aplicando validaciones lógicas, criterios de partición de equivalencias y valores límite.  
-Los resultados se registran automáticamente tanto en **archivos Excel** como en **archivos `.txt`**, generando un reporte estructurado y visualmente claro.
+Los resultados se registran automáticamente tanto en **archivos Excel** (con formato) como en **archivos `.txt`**, generando un reporte estructurado y visualmente claro.
 
 ---
 
 ## ⚙️ Tecnologías y librerías utilizadas
 
-- **Lenguaje:** Python 3  
+- **Lenguaje:** Python 3
+- **Framework de Testing:** Pytest (para gestión y ejecución de pruebas) 
 - **Framework principal:** Selenium WebDriver  
 - **Manejo de Excel:** openpyxl  
 - **Automatización concurrente:** multiprocessing  
@@ -45,16 +46,21 @@ Los resultados se registran automáticamente tanto en **archivos Excel** como en
    
 ---
 
-## 📁 Estructura del proyecto
+## 📁 Estructura del proyecto (Actualizado)
 
 ```bash
 SpaceBeyond-Automation/
 │
-├── Conexion.py              # Controla la conexión y navegación del navegador
-├── Login.py                 # Lógica de login, logout y validaciones de credenciales
-├── Reserva.py               # Automatización del formulario de reserva de planetas
-├── Planilla_Calculo.py      # Genera reportes en Excel con formato y fecha
-├── Ejecucion.py             # Orquestador principal: ejecuta login y reservas en paralelo
+├── conftest.py              # **Configuración Pytest:** Contiene los fixtures (setup/teardown)
+│                            # como la inicialización del reporte Excel.
+├── test_pruebas.py          # **Tests Pytest:** Contiene las funciones 'test_' que ejecuta Pytest.
+├── main_pruebas.py          # Lógica de orquestación de los flujos de login y reserva,
+│                            # llamada desde test_pruebas.py.
+├── Conexion.py              # Controla la conexión y navegación del navegador.
+├── Login.py                 # Lógica de login, logout y validaciones de credenciales.
+├── Reserva.py               # Automatización del formulario de reserva de planetas.
+├── Planilla_Calculo.py      # Genera reportes en Excel con formato y fecha (usa openpyxl).
+├── Ejecucion.py             # (Archivo de la versión anterior: No se usa para la ejecución Pytest).
 │
 ├── output/                  # Carpeta generada automáticamente con resultados
 │   ├── resultados_login.txt
@@ -68,6 +74,8 @@ SpaceBeyond-Automation/
 ---
 
 ## 🚀 Uso del script
+
+### Usando Ejecucion.py
 
 1. Ejecutar el archivo principal
 python Ejecucion.py
@@ -88,11 +96,19 @@ Al completar la ejecución, se genera el archivo:
 output/Casos_Prueba_Space&Beyond.xlsx
 con los resultados formateados, fecha, tester y estado de cada caso.
 
+### Usando pytest
+
+1. En la terminal de pycharm escribir, en la dirección del proyecto, **python -v**
+   
+2. Realiza las mismas acciones que usando **Ejecucion.py** pero utilizando **pytest** 
+
 ---
 
 ## 🧠 Conceptos aplicados
 
-- Encapsulamiento y responsabilidad única
+- Framework de Testing Profesional (Pytest): Uso de convenciones y fixtures para un setup y teardown ordenado.
+
+- Encapsulamiento y responsabilidad única (Page Objet Model Implicito)
 
 - Multiprocesamiento para ejecución concurrente
 
