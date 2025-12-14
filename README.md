@@ -1,20 +1,21 @@
 # 🪐 Automatización de Pruebas Funcionales – Space&Beyond
 
 Este proyecto implementa una **automatización de pruebas funcionales** sobre el sitio [demo.testim.io](https://demo.testim.io/), utilizando **Python, Selenium WebDriver**, y el framework de testing **Pytest**.  
-El sistema verifica los flujos de **login/logout** y **reserva de planetas**, aplicando validaciones lógicas, criterios de partición de equivalencias y valores límite.  
-Los resultados se registran automáticamente tanto en **archivos Excel** (con formato) como en **archivos `.txt`**, generando un reporte estructurado y visualmente claro.
+El objetivo es validar de forma automatizada los flujos críticos de login / logout y reserva de planetas, aplicando criterios de partición de equivalencias, valores límite y validaciones funcionales reales.
+
+Las pruebas se ejecutan como un flujo completo, simulando el comportamiento de un usuario final, y los resultados se registran automáticamente en archivos Excel formateados y archivos de texto.
 
 ---
 
 ## ⚙️ Tecnologías y librerías utilizadas
 
-- **Lenguaje:** Python 3
-- **Framework de Testing:** Pytest (para gestión y ejecución de pruebas) 
+- **Lenguaje:** Python 3.12
+- **Framework de Testing:** Pytest 
 - **Framework principal:** Selenium WebDriver  
 - **Manejo de Excel:** openpyxl  
-- **Automatización concurrente:** multiprocessing  
+- **Ejecución concurrente:** multiprocessing  
 - **Gestión de rutas y archivos:** os, glob, time  
-- **Expresiones regulares:** re  
+- **Validaciones:** Expresiones Regulares (re)  
 - **Entorno de ejecución:** Google Chrome + ChromeDriver  
 
 ---
@@ -51,23 +52,21 @@ Los resultados se registran automáticamente tanto en **archivos Excel** (con fo
 ```bash
 SpaceBeyond-Automation/
 │
-├── conftest.py              # **Configuración Pytest:** Contiene los fixtures (setup/teardown)
-│                            # como la inicialización del reporte Excel.
-├── test_pruebas.py          # **Tests Pytest:** Contiene las funciones 'test_' que ejecuta Pytest.
-├── main_pruebas.py          # Lógica de orquestación de los flujos de login y reserva,
-│                            # llamada desde test_pruebas.py.
-├── Conexion.py              # Controla la conexión y navegación del navegador.
-├── Login.py                 # Lógica de login, logout y validaciones de credenciales.
-├── Reserva.py               # Automatización del formulario de reserva de planetas.
-├── Planilla_Calculo.py      # Genera reportes en Excel con formato y fecha (usa openpyxl).
-├── Ejecucion.py             # (Archivo de la versión anterior: No se usa para la ejecución Pytest).
+├── ejecucion.py # Script principal que ejecuta el flujo completo E2E
+├── test_ejecucion.py # Test Pytest que ejecuta ejecucion.py como script real
 │
-├── output/                  # Carpeta generada automáticamente con resultados
-│   ├── resultados_login.txt
-│   ├── resultados_planeta_X.txt
-│   └── Casos_Prueba_Space&Beyond.xlsx
+├── Conexion.py # Inicialización y control del navegador
+├── Login.py # Lógica de login, logout y validaciones
+├── Reserva.py # Automatización del formulario de reservas
+├── Planilla_Calculo.py # Generación del reporte Excel con openpyxl
 │
-├── Copilot_20250531_124617.png   # Imagen utilizada en el formulario (archivo de prueba)
+├── output/ # Resultados generados automáticamente
+│ ├── resultados_login.txt
+│ ├── resultados_planeta_X.txt
+│ └── Casos_Prueba_Space&Beyond.xlsx
+│
+├── pytest.ini # Configuración de Pytest
+├── requirements.txt
 └── README.md
 ```
 
@@ -75,50 +74,73 @@ SpaceBeyond-Automation/
 
 ## 🚀 Uso del script
 
-### Usando Ejecucion.py
+### Usando Ejecucion.py (python Ejecucion.py)
 
-1. Ejecutar el archivo principal
-python Ejecucion.py
+Este modo ejecuta el flujo completo:
 
-2. El script realiza dos etapas:
-   🧩 Pruebas de Login y Logout:
-Ejecuta escenarios con distintas combinaciones de usuario y contraseña, validando comportamientos esperados.
-Los resultados se registran directamente en Excel y (opcionalmente) en output/resultados_login.txt.
+- Limpieza de archivos previos
 
-🪐 Pruebas de Reserva de Planetas:
-Genera automáticamente 243 combinaciones de prueba (valores válidos e inválidos), aplicando validaciones lógicas y visuales.
-Las reservas se ejecutan en paralelo (3 procesos simultáneos) para optimizar el tiempo de ejecución.
-Los resultados parciales se guardan en archivos .txt y luego se consolidan en el Excel final.
+- Pruebas de login y logout
 
-3. Reporte final:
-Al completar la ejecución, se genera el archivo:
+- Pruebas de reservas con múltiples combinaciones
 
-output/Casos_Prueba_Space&Beyond.xlsx
-con los resultados formateados, fecha, tester y estado de cada caso.
+- Ejecución concurrente de escenarios
 
-### Usando pytest
+- Generación del reporte Excel final
 
-1. En la terminal de pycharm escribir, en la dirección del proyecto, **python -v**
-   
-2. Realiza las mismas acciones que usando **Ejecucion.py** pero utilizando **pytest** 
+
+### Usando pytest (pytest -v - Recomendado)
+
+En este modo:
+
+- Pytest ejecuta test_ejecucion.py
+
+- El test lanza ejecucion.py como si fuera terminal o PyCharm
+
+- Se valida que todo el flujo termine correctamente
+
+- Se detectan fallos reales del proceso completo
+
+- Este enfoque simula un test E2E real, ideal para CI/CD. 
+
+---
+
+## Flujo de pruebas automatizadas
+### 1. Login / Logout
+
+- Ejecución de múltiples combinaciones de usuario y contraseña
+
+- Casos válidos e inválidos
+
+- Registro de resultados en Excel y archivos .txt
+
+### 2. Reserva de planetas
+
+- Generación automática de combinaciones de prueba
+
+- Validación de campos obligatorios y valores inválidos
+
+- Ejecución en paralelo para optimizar tiempos
+
+- Consolidación de resultados en el reporte final
 
 ---
 
 ## 🧠 Conceptos aplicados
 
-- Framework de Testing Profesional (Pytest): Uso de convenciones y fixtures para un setup y teardown ordenado.
+- Testing end‑to‑end con Pytest
 
-- Encapsulamiento y responsabilidad única (Page Objet Model Implicito)
+- Automatización web con Selenium
 
-- Multiprocesamiento para ejecución concurrente
+- Separación de responsabilidades por módulo
 
-- Validaciones con expresiones regulares
+- Multiprocessing aplicado a testing
 
-- Partición de equivalencias y valores límite
+- Manejo de errores y tolerancia a fallos
 
-- Generación automática de reportes
+- Generación automática de evidencias
 
-- Manejo de errores y tolerancia a fallos de interacción
+- Diseño orientado a entornos CI/CD
 
 ---
 
